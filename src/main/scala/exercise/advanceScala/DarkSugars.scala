@@ -1,5 +1,9 @@
 package exercise.advanceScala
 
+import sun.java2d.pipe.SpanShapeRenderer.Composite
+import sun.security.ec.point.ProjectivePoint.Mutable
+import sun.security.krb5.internal.crypto.Nonce.value
+
 import scala.::
 import scala.util.Try
 
@@ -82,7 +86,33 @@ object DarkSugars extends App {
 
   val harshang = new Boy("Harshang")
   harshang - ("Scala is Very awsome language")
+/*
+  class Composite[A,B]
+  val composite: Int Composite String = ???
+*/
 
+  /*class --> [A,B]
+  val toWards: Int --> String = ???*/
 
+  val anArray = Array(1,2,3,4)
+  anArray(2) = 7
+  println(anArray.toList)
+  anArray.update(2,6)
+  println(anArray.toList)
 
+  class Mutable {
+
+    private var anyValue: Int = 0
+
+    def anyValueOf: Int = anyValue
+
+    def anyValueOf_=(value: Int): Unit = {
+      anyValue = value
+    }
+
+  }
+
+  val anyValueContainer = new Mutable
+  anyValueContainer.anyValueOf = 34
+  println("any Value container`s value is :- " + anyValueContainer.anyValueOf)
 }
