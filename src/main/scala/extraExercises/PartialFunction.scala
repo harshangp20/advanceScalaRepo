@@ -4,7 +4,7 @@ import scala.io.StdIn
 
 object PartialFunction extends App {
 
-  print("Enter value for Variable:-")
+//  print("Enter value for Variable:-")
   val variable = StdIn.readLine()
   println("Value of variable is :-" + variable )
 
