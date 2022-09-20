@@ -65,6 +65,8 @@ class AllInclusiveSet[A] extends MySet[A] {
   override def +(elem: A): MySet[A] = this
   override def ++(anotherSet: MySet[A]): MySet[A] = this
 
+//  Below All methods will be implement soon
+
   override def map[B](f: A => B): MySet[B] = ???
 
   override def flatMap[B](f: A => MySet[B]): MySet[B] = ???
