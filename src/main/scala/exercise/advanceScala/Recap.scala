@@ -8,12 +8,12 @@ import scala.annotation.tailrec
 
 object Recap extends App {
 
-  /*val aCondition: Boolean = false
+  val aCondition: Boolean = false
   val aConditionalValue = if(aCondition) 42 else 36
   println(aConditionalValue)
 
-  // instructions vs expressions
-  // compiler infers types for us
+//   instructions vs expressions
+//   compiler infers types for us
 
   val aCodeBlock = {
     if (aCondition) 54
@@ -21,7 +21,7 @@ object Recap extends App {
   }
 
 //   Unit => void
-//  val theUnit: Unit = println("hello,Scala")
+  val theUnit: Unit = println("hello,Scala")
 
   // Recursion: stack and tail
   @tailrec
@@ -43,7 +43,7 @@ object Recap extends App {
        override def eat(a : Animal): Unit = println(a.toString + " is dead by crocodile")
     }
     val crocodile = new Crocodile
-    crocodile.eat(aDog)*/
+    crocodile.eat(aDog)
 
   //  generics
   abstract class MyList[+A]
