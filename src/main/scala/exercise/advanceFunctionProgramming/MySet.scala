@@ -47,7 +47,7 @@ class EmptySet[A] extends MySet[A] {
 
   def forEach(f: A => Unit): Unit = ()
 
-  //  impelmentation
+  //  implementation
 
   def -(elem: A): MySet[A] = this
 
@@ -55,34 +55,43 @@ class EmptySet[A] extends MySet[A] {
 
   def &(anotherSet: MySet[A]): MySet[A] = this
 
-  def unary_! : MySet[A] = new AllInclusiveSet[A]
+  def unary_! : MySet[A] = new PropertyBasedSet[A](_ => true)
 
 }
 
-class AllInclusiveSet[A] extends MySet[A] {
+ // all elements of tye A which satisfya a property
+ // { x in A | property(x) }
+class PropertyBasedSet[A] (property : A => Boolean) extends MySet[A] {
 
-  override def contains(elem: A): Boolean = true
-  override def +(elem: A): MySet[A] = this
-  override def ++(anotherSet: MySet[A]): MySet[A] = this
+   override def contains(elem: A): Boolean = property(elem)
 
-//  Below All methods will be implement soon
+//   { x in A | property(x) } + element = { x in A | property(x) || x == element }
+   override  def +(elem: A): MySet[A] =
+    new PropertyBasedSet[A](x => property(x) || x == elem)
 
-  override def map[B](f: A => B): MySet[B] = ???
+//   { x in A | property(x) } + element = { x in A | property(x) || set contains x }
+   override def ++(anotherSet: MySet[A]): MySet[A] =
+    new PropertyBasedSet[A](x => property(x) || anotherSet(x))
 
-  override def flatMap[B](f: A => MySet[B]): MySet[B] = ???
+//  all integers => (_ % 3) => [0 1 2]
 
-  override def filter(predicate: A => Boolean): MySet[A] = ???
+   override def map[B](f: A => B): MySet[B] = politelyFail
 
-  override def forEach(f: A => Unit): Unit = ???
+   override def flatMap[B](f: A => MySet[B]): MySet[B] = politelyFail
 
-  override def -(elem: A): MySet[A] = ???
+   override def forEach(f: A => Unit): Unit = politelyFail
 
-  override def --(anotherSet: MySet[A]): MySet[A] = ???
+    override def filter(predicate: A => Boolean): MySet[A] = new PropertyBasedSet[A](x => property(x) && predicate(x))  // property-based set
 
-  override def &(anotherSet: MySet[A]): MySet[A] = ???
+   override def -(elem: A): MySet[A] =filter(x => x != elem)
 
-  override def unary_! : MySet[A] = ???
+   override def --(anotherSet: MySet[A]): MySet[A] = filter(!anotherSet)
 
+   override def &(anotherSet: MySet[A]): MySet[A] = filter(anotherSet)
+
+   override def unary_! : MySet[A] = new PropertyBasedSet[A](x => !property(x))
+
+   def politelyFail = throw new IllegalArgumentException("Something Getting Error")
 }
 
 class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
@@ -125,9 +134,7 @@ class NonEmptySet[A](head: A, tail: MySet[A]) extends MySet[A] {
 
   def &(anotherSet: MySet[A]): MySet[A] = filter(anotherSet)
 
-//  Will implement this method soon
-
-  def unary_! : MySet[A] = ???
+  def unary_! : MySet[A] = new PropertyBasedSet[A](x => this.contains(x))
 
 }
 
@@ -149,7 +156,12 @@ object MySetVariables extends App {
 
   val s = MySet(1, 2, 3, 4)
 
-  s + 4 + 5 ++ MySet(6, 7, 8) + 9 flatMap (x => MySet(x, 12 * x)) forEach println
+  s + 6 ++ MySet(-1,-2)  forEach println
 
+//  s + 4 + 5 ++ MySet(6, 7, 8) + 9 flatMap (x => MySet(x, 12 * x)) forEach println
+
+  val negativeNumber = !s
+  println(negativeNumber(6))
+  println(negativeNumber(1))
 
 }
